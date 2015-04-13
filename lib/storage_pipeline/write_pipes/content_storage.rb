@@ -1,4 +1,4 @@
-module StoragePipeline::Pipes
+module StoragePipeline::WritePipes
   class ContentStorage
 
     attr_reader :storage_field, :storage_strategy_builder
@@ -20,7 +20,7 @@ module StoragePipeline::Pipes
       else strategy.write_from(content)
       end
 
-      # TODO: read information about metadata fields into attributes
+      attributes.merge!(strategy.metadata)
 
       attributes
     end

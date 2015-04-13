@@ -1,6 +1,6 @@
 require 'json'
 
-module StoragePipeline::Pipes
+module StoragePipeline::WritePipes
   class AttributeSerializer
     def pipe(attributes, options = {})
       attributes.each_with_object({}) do |attr, serialized_attrs|

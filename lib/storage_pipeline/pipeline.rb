@@ -1,21 +1,26 @@
-require_relative 'pipes/cassandra_writer'
-require_relative 'pipes/attribute_serializer'
-require_relative 'pipes/content_storage'
+require_relative 'write_pipes/cassandra_writer'
+require_relative 'write_pipes/attribute_serializer'
+require_relative 'write_pipes/content_storage'
 
 module StoragePipeline
+
   class Pipeline
     attr_reader :pipes
     def initialize(pipes = [])
       @pipes = pipes
     end
 
+    # @param [#pipe] A pipe to append to the pipeline
     def <<(pipe)
       pipes << pipe
       self
     end
 
-    def store(input_attributes, options = {})
-      pipes.inject(input_attributes) { |attributes, p| p.pipe(attributes, options) }
+    # Insert something into the pipeline to be processed
+    # @param [Object] The original input data to enter the pipeline. This may be mutated by each pipe in the pipeline.
+    # @param [Hash] An immutable set of options for this insert.
+    def insert(input, options = {})
+      pipes.inject(input) { |attributes, p| p.pipe(attributes, options) }
     end
   end
 end
