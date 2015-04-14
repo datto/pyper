@@ -16,32 +16,30 @@ module StoragePipeline::WritePipes
               metadata_key: :raw_sha256
             })
         end
+
+        @pipe = ContentStorage.new(:content, &@storage_builder)
+        @strategy = @storage_builder.call({})
       end
 
       should 'store content using the provided storage builder' do
         content = 'asdf'
-        pipe = ContentStorage.new(:content, &@storage_builder)
-        pipe.pipe(:content => content)
+        @pipe.pipe(:content => content)
 
-        strategy = @storage_builder.call({})
-        assert_equal content, strategy.read
+        assert_equal content, @strategy.read
       end
 
 
       should 'store size and checksum metadata' do
         content = 'asdf'
-        pipe = ContentStorage.new(:content, &@storage_builder)
-        pipe.pipe(:content => content)
-        strategy = @storage_builder.call({})
+        @pipe.pipe(:content => content)
 
-        assert_equal '4', strategy.metadata[:raw_size]
-        assert strategy.metadata[:raw_sha256]
+        assert_equal '4', @strategy.metadata[:raw_size]
+        assert @strategy.metadata[:raw_sha256]
       end
 
       should 'remove content from attributes adding new metadata fields' do
         content = 'asdf'
-        pipe = ContentStorage.new(:content, &@storage_builder)
-        attributes = pipe.pipe(:content => content)
+        attributes = @pipe.pipe(:content => content)
 
         assert_equal '4', attributes[:raw_size]
         assert attributes[:raw_sha256]
