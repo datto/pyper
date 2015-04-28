@@ -5,7 +5,7 @@ module StoragePipeline::ReadPipes
   class AttributeDeserializer < Struct.new(:type_mapping)
     # @param [Enumerable<Hash>] A list of items
     # @return [Enumerable<Hash>] A list of items, deserialized according to the type mapping
-    def pipe(items = [], options = {})
+    def pipe(items, status)
       items.each do |item|
         type_mapping.each do |field, type|
           if item[field]

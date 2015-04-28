@@ -7,7 +7,7 @@ module StoragePipeline::WritePipes
       @storage_strategy_builder = storage_strategy_builder
     end
 
-    def pipe(attributes, options = {})
+    def pipe(attributes, status = {})
       strategy = storage_strategy_builder.call(attributes)
 
       content = attributes.delete(storage_field)

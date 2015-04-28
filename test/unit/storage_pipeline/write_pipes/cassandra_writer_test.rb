@@ -34,6 +34,18 @@ module StoragePipeline::WritePipes
         attributes = {id: 'id', a: 'a', b: 'b'}
         assert_equal attributes, @writer.pipe(attributes)
       end
+
+      should 'raise an error if too many attributes are provided' do
+        attributes = {id: 'id', a: 'a', b: 'b', not_an_attribute: 'x'}
+        assert_raises(Cassandra::Errors::InvalidError) { @writer.pipe(attributes) }
+      end
+
+      should 'filter attributes if a filter set is given, returning the original attributes' do
+        attributes = {id: 'id', a: 'a', b: 'b', not_an_attribute: 'x'}
+        filter = [:id, :a, :b]
+        writer = CassandraWriter.new(:test, @client, filter)
+        assert_equal attributes, writer.pipe(attributes)
+      end
     end
   end
 end
