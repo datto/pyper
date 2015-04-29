@@ -8,6 +8,8 @@ require_relative 'read_pipes/attribute_deserializer'
 require_relative 'read_pipes/virtus_deserializer'
 require_relative 'read_pipes/virtus_parser'
 require_relative 'read_pipes/cass_mod_key_enumerator'
+require_relative 'read_pipes/pagination_decoding'
+require_relative 'read_pipes/pagination_encoding'
 
 # pipes that can be used for both reading and writing
 require_relative 'pipes/mod_key'
