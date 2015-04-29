@@ -1,6 +1,35 @@
 # StoragePipeline
 
-TODO: Write a gem description
+Flexible pipelines for content storage and retrieval.
+
+StoragePipeline allows the construction of pipelines to store and retrieve data. Each pipe in the pipeline modifies the
+information in the pipeline before passing it to the next step. By composing pipes in different ways, different
+data access patterns can be created.
+
+## Usage
+
+```
+
+write_pipe = StoragePipeline::Pipeline.new <<
+   StoragePipeline::WritePipes::AttributeSerializer.new <<
+   StoragePipeline::Pipes::FieldRename.new(:to => :to_emails, :from => :from_email) <<
+   StoragePipeline::Pipes::ModKey.new <<
+   StoragePipeline::WritePipes::CassandraWriter.new(:table_1, metadata_client) <<
+   StoragePipeline::WritePipes::CassandraWriter.new(:table_2, indexes_client) <<
+   StoragePipeline::WritePipes::CassandraWriter.new(:table_3, indexes_client)
+
+write_pipe.push(attributes)
+
+read_pipe = StoragePipeline::Pipeline.new <<
+   StoragePipeline::ReadPipes::PaginationDecoding.new <<
+   StoragePipeline::ReadPipes::CassandraItems.new(:table, indexes_client) <<
+   StoragePipeline::Pipes::FieldRename.new(:to_emails => :to, :from_email => :from) <<
+   StoragePipeline::ReadPipes::VirtusDeserializer.new(message_attributes) <<
+   StoragePipeline::ReadPipes::VirtusParser.new(MyModelClass)
+
+result = read_pipe.push(:row => '1', :id => 'i')
+result.value # Enumerator wich matching instances of MyModelClass
+```
 
 ## Installation
 
