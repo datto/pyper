@@ -10,6 +10,7 @@ require_relative 'read_pipes/virtus_parser'
 require_relative 'read_pipes/cass_mod_key_enumerator'
 require_relative 'read_pipes/pagination_decoding'
 require_relative 'read_pipes/pagination_encoding'
+require_relative 'read_pipes/force_enumerator'
 
 # pipes that can be used for both reading and writing
 require_relative 'pipes/mod_key'
@@ -34,7 +35,7 @@ module StoragePipeline
     # Insert something into the pipeline to be processed
     # @param [Object] The original input data to enter the pipeline. This may be mutated by each pipe in the pipeline.
     # @param [Hash] A status hash that may be updated by the pipeline
-    def send(input)
+    def push(input)
       status = {}
       value = pipes.inject(input) { |attributes, p| p.pipe(attributes, status) }
       PipeStatus.new(value, status)

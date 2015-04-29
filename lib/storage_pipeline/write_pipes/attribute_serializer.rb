@@ -7,6 +7,7 @@ module StoragePipeline::WritePipes
         value = attr.last
         serialized_attrs[attr.first] = case value
                                        when Array, Hash then JSON.generate(value)
+                                       when DateTime then value.to_time
                                        else value
                                        end
       end
