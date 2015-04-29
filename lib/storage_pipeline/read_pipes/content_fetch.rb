@@ -7,7 +7,7 @@ module StoragePipeline::ReadPipes
       @storage_strategy_builder = storage_strategy_builder
     end
 
-    def pipe(attributes, status)
+    def pipe(attributes, status = {})
       strategy = storage_strategy_builder.call(attributes)
       content =
         begin

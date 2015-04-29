@@ -32,7 +32,7 @@ module StoragePipeline
     # Insert something into the pipeline to be processed
     # @param [Object] The original input data to enter the pipeline. This may be mutated by each pipe in the pipeline.
     # @param [Hash] A status hash that may be updated by the pipeline
-    def insert(input)
+    def send(input)
       status = {}
       value = pipes.inject(input) { |attributes, p| p.pipe(attributes, status) }
       PipeStatus.new(value, status)
