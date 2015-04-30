@@ -1,4 +1,8 @@
 module StoragePipeline::ReadPipes
+  # A pipe for reading items from a single row in cassandra
+  # @param [Symbol] table name
+  # @param [Cassava::Client] client to query cassandra with
+  # @param [Hash] Additional/default options to pass to the Cassava execute statement.
   class CassandraItems < Struct.new(:table, :client, :options)
     # @param [Hash] arguments
     # @option [Integer] limit
@@ -6,7 +10,7 @@ module StoragePipeline::ReadPipes
     # @option [Object] paging_state
     # @option [Integer] page_size
     # @return [Enumerator::Lazy<Hash>] enumerator of items
-    def pipe(arguments, status)
+    def pipe(arguments, status = {})
       limit = arguments.delete(:limit)
       page_size = arguments.delete(:page_size)
       paging_state = arguments.delete(:paging_state)
