@@ -132,10 +132,6 @@ Or install it yourself as:
 
     $ gem install pyper
 
-## Usage
-
-TODO: Write usage instructions here
-
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/pyper/fork )
