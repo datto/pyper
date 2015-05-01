@@ -18,7 +18,7 @@ module Pyper::ReadPipes
 
     # @param [Hash] arguments
     # @return [Enumerator::Lazy<Hash>] enumerator of items from all rows
-    def pipe(arguments, status)
+    def pipe(arguments, status = {})
       (Enumerator.new do |yielder|
          (0..mod_size).each do |mod_id|
            result = client.select(table).where(arguments.merge(:mod_key => mod_id)).execute
