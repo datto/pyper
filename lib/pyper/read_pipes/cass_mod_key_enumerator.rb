@@ -1,4 +1,4 @@
-module StoragePipeline::ReadPipes
+module Pyper::ReadPipes
 
   # This pipe is for reading data from sharded rows in Cassandra. The table must have rows sharded by the 'mod_key' field.
   # For a fixed number of such shards, this pipe reads all data from all of those shards, returning a lazy enumerator

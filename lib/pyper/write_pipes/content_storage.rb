@@ -1,4 +1,4 @@
-module StoragePipeline::WritePipes
+module Pyper::WritePipes
   class ContentStorage
 
     attr_reader :storage_field, :storage_strategy_builder

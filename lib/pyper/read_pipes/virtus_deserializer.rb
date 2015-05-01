@@ -1,6 +1,6 @@
 require 'json'
 
-module StoragePipeline::ReadPipes
+module Pyper::ReadPipes
   # @param [Hash<Symbol, Class>] A map from field names to types. fields will be deserialized according to these types.
   class VirtusDeserializer
 

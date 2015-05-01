@@ -1,4 +1,4 @@
-module StoragePipeline::Pipes
+module Pyper::Pipes
   # @param [Hash] A map of old field names to new field names, which will be used to rename attributes.
   class FieldRename < Struct.new(:attr_map)
     def pipe(attrs_or_items, status = {})

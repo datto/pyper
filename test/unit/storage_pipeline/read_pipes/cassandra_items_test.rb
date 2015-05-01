@@ -1,6 +1,6 @@
 require_relative '../../../test_helper'
 
-module StoragePipeline::ReadPipes
+module Pyper::ReadPipes
   class CassandraItemsTest < Minitest::Should::TestCase
     context 'a cassandra reader pipe' do
 

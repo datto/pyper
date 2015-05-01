@@ -1,4 +1,4 @@
-module StoragePipeline::ReadPipes
+module Pyper::ReadPipes
   # A pipe for reading items from a single row in cassandra
   # @param [Symbol] table name
   # @param [Cassava::Client] client to query cassandra with

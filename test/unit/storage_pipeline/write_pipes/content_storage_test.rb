@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module StoragePipeline::WritePipes
+module Pyper::WritePipes
   class ContentStorageTest < Minitest::Should::TestCase
     context 'the content storage pipe' do
 

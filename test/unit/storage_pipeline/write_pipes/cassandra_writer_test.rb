@@ -1,6 +1,6 @@
 require_relative '../../../test_helper'
 
-module StoragePipeline::WritePipes
+module Pyper::WritePipes
   class CassandraWriterTest < Minitest::Should::TestCase
     context 'a cassandra writer pipe' do
 

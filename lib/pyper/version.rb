@@ -1,3 +1,3 @@
-module StoragePipeline
+module Pyper
   VERSION = "0.0.1"
 end

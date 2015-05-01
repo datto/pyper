@@ -16,7 +16,7 @@ require_relative 'read_pipes/force_enumerator'
 require_relative 'pipes/mod_key'
 require_relative 'pipes/field_rename'
 
-module StoragePipeline
+module Pyper
 
   class PipeStatus < Struct.new(:value, :status); end
 

@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'storage_pipeline/version'
+require 'pyper/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "storage_pipeline"
-  spec.version       = StoragePipeline::VERSION
+  spec.name          = "pyper"
+  spec.version       = Pyper::VERSION
   spec.authors       = ["Arron Norwell"]
   spec.email         = ["anorwell@datto.com"]
   spec.summary       = %q{Create pipelines for storing data.}

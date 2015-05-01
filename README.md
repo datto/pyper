@@ -1,8 +1,8 @@
-# StoragePipeline
+# Pyper
 
 Flexible pipelines for content storage and retrieval.
 
-StoragePipeline allows the construction of pipelines to store and retrieve data. Each pipe in the pipeline modifies the
+Pyper allows the construction of pipelines to store and retrieve data. Each pipe in the pipeline modifies the
 information in the pipeline before passing it to the next step. By composing pipes in different ways, different
 data access patterns can be created.
 
@@ -11,13 +11,13 @@ data access patterns can be created.
 Create a pipeline composed of a set of pipes:
 
 ```ruby
-write_pipeline = StoragePipeline::Pipeline.new <<
-   StoragePipeline::WritePipes::AttributeSerializer.new <<
-   StoragePipeline::Pipes::FieldRename.new(:to => :to_emails, :from => :from_email) <<
-   StoragePipeline::Pipes::ModKey.new <<
-   StoragePipeline::WritePipes::CassandraWriter.new(:table_1, metadata_client) <<
-   StoragePipeline::WritePipes::CassandraWriter.new(:table_2, indexes_client) <<
-   StoragePipeline::WritePipes::CassandraWriter.new(:table_3, indexes_client)
+write_pipeline = Pyper::Pipeline.new <<
+   Pyper::WritePipes::AttributeSerializer.new <<
+   Pyper::Pipes::FieldRename.new(:to => :to_emails, :from => :from_email) <<
+   Pyper::Pipes::ModKey.new <<
+   Pyper::WritePipes::CassandraWriter.new(:table_1, metadata_client) <<
+   Pyper::WritePipes::CassandraWriter.new(:table_2, indexes_client) <<
+   Pyper::WritePipes::CassandraWriter.new(:table_3, indexes_client)
 ```
 
 Then, push data down the pipe:
@@ -44,13 +44,13 @@ to read data from an external source. This data may then be transformed by the p
 deserialization or data mapping operations.
 
 ```ruby
-read_pipeline = StoragePipeline::Pipeline.new <<
-   StoragePipeline::ReadPipes::PaginationDecoding.new <<
-   StoragePipeline::ReadPipes::CassandraItems.new(:table, indexes_client) <<
-   StoragePipeline::Pipes::FieldRename.new(:to_emails => :to, :from_email => :from) <<
-   StoragePipeline::ReadPipes::PaginationEncoding.new <<
-   StoragePipeline::ReadPipes::VirtusDeserializer.new(message_attributes) <<
-   StoragePipeline::ReadPipes::VirtusParser.new(MyModelClass)
+read_pipeline = Pyper::Pipeline.new <<
+   Pyper::ReadPipes::PaginationDecoding.new <<
+   Pyper::ReadPipes::CassandraItems.new(:table, indexes_client) <<
+   Pyper::Pipes::FieldRename.new(:to_emails => :to, :from_email => :from) <<
+   Pyper::ReadPipes::PaginationEncoding.new <<
+   Pyper::ReadPipes::VirtusDeserializer.new(message_attributes) <<
+   Pyper::ReadPipes::VirtusParser.new(MyModelClass)
 
 result = read_pipeline.push(:row => '1', :id => 'i', :page_token => 'sdf')
 result.value # Enumerator with matching instances of MyModelClass
@@ -63,13 +63,13 @@ sensible for the `PaginationDecoding` pipe to come after the `CassandraItems` pi
 
 ### Creating and using pipelines
 
-A pipeline is an instance of `StoragePipeline::Pipeline`, to which pipes are appended using the `<<` operator.
+A pipeline is an instance of `Pyper::Pipeline`, to which pipes are appended using the `<<` operator.
 
 ```ruby
-my_pipeline = StoragePipeline::Pipeline.new <<
-   StoragePipeline::ReadPipes::PaginationDecoding.new <<
-   StoragePipeline::ReadPipes::CassandraItems.new(:table, indexes_client)
-   StoragePipeline::ReadPipes::PaginationEncoding.new
+my_pipeline = Pyper::Pipeline.new <<
+   Pyper::ReadPipes::PaginationDecoding.new <<
+   Pyper::ReadPipes::CassandraItems.new(:table, indexes_client)
+   Pyper::ReadPipes::PaginationEncoding.new
 ```
 
 To invoke the pipeline, use the `push` method and provide the data to enter the pipeline:
@@ -78,7 +78,7 @@ To invoke the pipeline, use the `push` method and provide the data to enter the 
 pipe_status = my_pipeline.push(:row => '1', :id => 'i')
 ```
 
-Here, `pipe_status` is a `StoragePipeline::PipeStatus` object, which contains two attributes, `pipe_status.value` and
+Here, `pipe_status` is a `Pyper::PipeStatus` object, which contains two attributes, `pipe_status.value` and
 `pipe_status.status`. The value is the returned result of the series of tranformations applied by the pipeline. The status
 contains metadata about the push operation that might be created by each pipe in the pipeline.
 
@@ -121,7 +121,7 @@ end
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'storage_pipeline'
+gem 'pyper'
 ```
 
 And then execute:
@@ -130,7 +130,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install storage_pipeline
+    $ gem install pyper
 
 ## Usage
 
@@ -138,7 +138,7 @@ TODO: Write usage instructions here
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/storage_pipeline/fork )
+1. Fork it ( https://github.com/[my-github-username]/pyper/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

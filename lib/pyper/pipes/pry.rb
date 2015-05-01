@@ -1,4 +1,4 @@
-module StoragePipeline::Pipes
+module Pyper::Pipes
   # For debugging purposes
   class Pry
     def pipe(items, status)

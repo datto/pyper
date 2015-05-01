@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module StoragePipeline::ReadPipes
+module Pyper::ReadPipes
   class PaginationEncodingTest < Minitest::Should::TestCase
     setup do
       @pipe = PaginationEncoding.new

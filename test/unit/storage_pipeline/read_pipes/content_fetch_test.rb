@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module StoragePipeline::ReadPipes
+module Pyper::ReadPipes
   class ContentFetchTest < Minitest::Should::TestCase
     context 'the content fetch pipe' do
 

@@ -1,4 +1,4 @@
-module StoragePipeline::Pipes
+module Pyper::Pipes
   class ModKey
     attr_reader :mod_size, :id_field
     def initialize(mod_size = 100, id_field = :id)

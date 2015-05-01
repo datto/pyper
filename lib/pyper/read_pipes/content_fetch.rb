@@ -1,4 +1,4 @@
-module StoragePipeline::ReadPipes
+module Pyper::ReadPipes
   class ContentFetch
 
     attr_reader :storage_field, :storage_strategy_builder

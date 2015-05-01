@@ -1,6 +1,6 @@
 require 'base64'
 
-module StoragePipeline::ReadPipes
+module Pyper::ReadPipes
   class PaginationDecoding
 
     def pipe(args, status = {})
