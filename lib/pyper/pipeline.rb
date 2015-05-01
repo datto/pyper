@@ -15,6 +15,7 @@ require_relative 'read_pipes/force_enumerator'
 # pipes that can be used for both reading and writing
 require_relative 'pipes/mod_key'
 require_relative 'pipes/field_rename'
+require_relative 'pipes/default_values'
 
 module Pyper
 
