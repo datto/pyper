@@ -10,8 +10,8 @@ module Pyper::Pipes
 
     def rename(item)
       attr_map.each do |old,new|
-        item[new] = item.delete(old) if item[old]
-        item[new.to_s] = item.delete(old.to_s) if item[old.to_s]
+        item[new.to_sym] = item.delete(old.to_sym) if item.has_key?(old.to_sym)
+        item[new.to_s] = item.delete(old.to_s) if item.has_key?(old.to_s)
       end
       item
     end
