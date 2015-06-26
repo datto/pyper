@@ -32,7 +32,7 @@ module Pyper::WritePipes
     end
 
     should 'encode strings to utf-8' do
-      value = 'str'.force_encoding('UTF-8')
+      value = 'str'.force_encoding('ascii-8bit')
       attributes = { :string => value }
       out = @pipe.pipe(attributes)
       assert_equal 1, out.count
