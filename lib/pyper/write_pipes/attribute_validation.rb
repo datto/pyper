@@ -14,10 +14,10 @@ module Pyper::WritePipes
     # @option opts [Array<Symbol>] :presence Specifies a list of attributes for which
     #   presence validations should be performed. If any attribute in the provided list
     #   is nil or missing, a Failure error will be raised.
-    # @option opts [Array<Hash>] :inclusion Specifies a list of attributes for which
-    #   inclusion validations should be performed. Each Hash in the list should 
-    #   contain one key (the attribute) which points to an array of valid values.
-    #   If the actual value at that key is not included in the list of valid values,
+    # @option opts [Hash] :inclusion Specifies attributes for which inclusion
+    #   validations should be performed. Each key in the Hash should represent an
+    #   attribute to validate and should point to an Array of valid values. If the
+    #   actual value at that key is not included in the list of valid values,
     #   a Failure error will be raised.
     def initialize(opts={})
       @presence_validations = opts[:presence] || []
