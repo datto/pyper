@@ -3,9 +3,9 @@ require 'test_helper'
 module Pyper::WritePipes
   class AttributeValidationTest < Minitest::Should::TestCase
     context "pipe" do
-      context "with presence validations" do
+      context "with required attributes" do
         setup do
-          @opts = { :presence => [:foo, :bar] }
+          @opts = { :required => [:foo, :bar] }
           @pipe = AttributeValidation.new(@opts)
         end
 
@@ -32,9 +32,9 @@ module Pyper::WritePipes
         end
       end
 
-      context "with inclusion validations" do
+      context "with restricted attributes" do
         setup do
-          @opts = { :inclusion => { :bar => ["qux", "bazqux"] } }
+          @opts = { :restricted => { :bar => ["qux", "bazqux"] } }
           @pipe = AttributeValidation.new(@opts)
         end
 
@@ -50,9 +50,9 @@ module Pyper::WritePipes
         end
       end
 
-      context "whitelist validations" do
+      context "with allowed attributes" do
         setup do
-          @opts = { :whitelist => [:foo, :bar] }
+          @opts = { :allowed => [:foo, :bar] }
           @pipe = AttributeValidation.new(@opts)
         end
 
@@ -66,7 +66,7 @@ module Pyper::WritePipes
           @pipe.pipe({ :foo => "foo", :bar => "bar" })
         end
 
-        should "allow all attributes when whitelist option is not set" do
+        should "allow all attributes when allowed option is not set" do
           pipe = AttributeValidation.new
 
           # Nothing should be raised now.
@@ -76,9 +76,9 @@ module Pyper::WritePipes
 
       should "return attributes hash when all is well" do
         opts = {
-          :whitelist => [:foo, :bar],
-          :presence => [:foo],
-          :inclusion => {
+          :allowed => [:foo, :bar],
+          :required => [:foo],
+          :restricted => {
             :bar => ["bar", "foobar"]
           }
         }
