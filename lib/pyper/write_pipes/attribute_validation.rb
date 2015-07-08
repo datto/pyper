@@ -4,15 +4,15 @@ module Pyper::WritePipes
     # Raised when validation fails.
     class Failure < ::StandardError; end
 
-    # An Array of attributes that are allowed to be set. If empty, all attributes
+    # Set of attributes that are allowed to be set. If empty, all attributes
     # are allowed.
     attr_reader :allowed
 
-    # An Array of attributes that are required to be set.
+    # Set of attributes that are required to be set.
     attr_reader :required
 
-    # An Hash of attributes whose value must be restricted to a set of valid values.
-    # Format :attribute => VALID_VALUES.
+    # Hash of attributes whose value must be restricted in some way.
+    # Format :attribute => lambda { |value| #Return boolean indicating pass/fail }
     attr_reader :restricted
 
     # @param opts [Hash] Options defining how attributes should be validated.
@@ -20,32 +20,31 @@ module Pyper::WritePipes
     #   to be set. If empty, all attributes are assumed to be allowed.
     # @option opts [Array<Symbol>] :required A list of attributes that are required
     #   to be set.
-    # @option opts [Hash] :restricted A hash of attributes whose value must be
-    #   restricted to a set of valid values. Format :attribute => VALID_VALUES.
+    # @option opts [Hash] :restricted A Hash of attributes whose value must be
+    #   restricted in some way.
+    #   Format :attribute => lambda { |value| #Return boolean indicating pass/fail }
     def initialize(opts={})
-      @allowed = opts[:allowed]
-      @required = opts[:required] || []
-      @restricted = opts[:restricted] || {}
+      @allowed = Set.new(opts[:allowed]) if opts[:allowed]
+      @required = Set.new(opts[:required]) if opts[:required]
+      @restricted = opts[:restricted]
     end
 
     def pipe(attributes, status = {})
-      required.each do |attr|
-        if attributes[attr].nil?
-          raise Failure.new("Missing required attribute #{attr}.")
-        end
-      end
-
-      restricted.each do |attr, valid_values|
-        unless valid_values.include?(attributes[attr])
-          raise Failure.new("Invalid value for attribute #{attr}.")
-        end
-      end
-
       if allowed.present?
         attributes.keys.each do |attr|
-          unless allowed.include?(attr)
-            raise Failure.new("Attribute #{attr} is not allowed.")
-          end
+          raise Failure.new("Attribute #{attr} is not allowed.") unless allowed.include?(attr)
+        end
+      end
+
+      if required.present?
+        required.each do |attr|
+          raise Failure.new("Missing required attribute #{attr}.") if attributes[attr].nil?
+        end
+      end
+
+      if restricted.present?
+        restricted.each do |attr, test|
+          raise Failure.new("Invalid value for attribute #{attr}.") unless test.call(attributes[attr])
         end
       end
 

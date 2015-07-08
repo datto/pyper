@@ -32,24 +32,6 @@ module Pyper::WritePipes
         end
       end
 
-      context "with restricted attributes" do
-        setup do
-          @opts = { :restricted => { :bar => ["qux", "bazqux"] } }
-          @pipe = AttributeValidation.new(@opts)
-        end
-
-        should "raise when attribute value is invalid" do
-          error = assert_raises(AttributeValidation::Failure) do
-            @pipe.pipe({ :bar => "foo"})
-          end
-          assert_equal "Invalid value for attribute bar.", error.message
-
-          # Nothing should be raised now.
-          @pipe.pipe({ :bar => "qux"})
-          @pipe.pipe({ :bar => "bazqux"})
-        end
-      end
-
       context "with allowed attributes" do
         setup do
           @opts = { :allowed => [:foo, :bar] }
@@ -74,12 +56,35 @@ module Pyper::WritePipes
         end
       end
 
+
+      context "with restricted attributes" do
+        setup do
+          @opts = {
+            :restricted => {
+              :bar => lambda { |value| ["qux", "bazqux"].include?(value) }
+            }
+          }
+          @pipe = AttributeValidation.new(@opts)
+        end
+
+        should "raise when lambda returns false" do
+          error = assert_raises(AttributeValidation::Failure) do
+            @pipe.pipe({ :bar => "foo"})
+          end
+          assert_equal "Invalid value for attribute bar.", error.message
+
+          # Nothing should be raised now.
+          @pipe.pipe({ :bar => "qux" })
+          @pipe.pipe({ :bar => "bazqux" })
+        end
+      end
+
       should "return attributes hash when all is well" do
         opts = {
           :allowed => [:foo, :bar],
           :required => [:foo],
           :restricted => {
-            :bar => ["bar", "foobar"]
+            :bar => lambda { |value| ["bar", "foobar"].include?(value) }
           }
         }
         pipe = AttributeValidation.new(opts)
