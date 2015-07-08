@@ -4,11 +4,11 @@ module Pyper::WritePipes
     # Raised when validation fails.
     class Failure < ::StandardError; end
 
-    # Set of attributes that are allowed to be set. If empty, all attributes
+    # Array of attributes that are allowed to be set. If empty, all attributes
     # are allowed.
     attr_reader :allowed
 
-    # Set of attributes that are required to be set.
+    # Array of attributes that are required to be set.
     attr_reader :required
 
     # Hash of attributes whose value must be restricted in some way.
@@ -24,8 +24,8 @@ module Pyper::WritePipes
     #   restricted in some way.
     #   Format :attribute => lambda { |value| #Return boolean indicating pass/fail }
     def initialize(opts={})
-      @allowed = Set.new(opts[:allowed]) if opts[:allowed]
-      @required = Set.new(opts[:required]) if opts[:required]
+      @allowed = opts[:allowed] if opts[:allowed]
+      @required = opts[:required] if opts[:required]
       @restricted = opts[:restricted]
     end
 
