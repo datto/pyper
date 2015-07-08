@@ -8,7 +8,7 @@ module Pyper::WritePipes
     # are allowed.
     attr_reader :allowed
 
-    # Array of attributes that are required to be set.
+    # Array of attributes that are required to be present (non-nil).
     attr_reader :required
 
     # Hash of attributes whose value must be restricted in some way.
@@ -19,7 +19,7 @@ module Pyper::WritePipes
     # @option opts [Array<Symbol>] :allowed A list of attributes that are allowed
     #   to be set. If empty, all attributes are assumed to be allowed.
     # @option opts [Array<Symbol>] :required A list of attributes that are required
-    #   to be set.
+    #   to be present (non-nil).
     # @option opts [Hash] :restricted A Hash of attributes whose value must be
     #   restricted in some way.
     #   Format :attribute => lambda { |value| #Return boolean indicating pass/fail }
