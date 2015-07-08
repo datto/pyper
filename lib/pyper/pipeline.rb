@@ -1,5 +1,6 @@
 require_relative 'write_pipes/cassandra_writer'
 require_relative 'write_pipes/attribute_serializer'
+require_relative 'write_pipes/attribute_validation'
 require_relative 'write_pipes/content_storage'
 
 require_relative 'read_pipes/content_fetch'
