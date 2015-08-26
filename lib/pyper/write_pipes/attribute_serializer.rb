@@ -18,9 +18,7 @@ module Pyper::WritePipes
       when Array
         value.map { |v| force_encode_to_UTF8(v) }
       when Hash
-        result = {}
-        value.each { |k, v| result[k] = force_encode_to_UTF8(v) }
-        result
+        Hash[value.map { |k,v| [k, force_encode_to_UTF8(v)] }]
       when String
         value.dup.force_encoding('UTF-8')
       else
