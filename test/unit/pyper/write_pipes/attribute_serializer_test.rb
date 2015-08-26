@@ -39,6 +39,16 @@ module Pyper::WritePipes
       assert_equal Encoding::UTF_8, out[:string].encoding
     end
 
+    should 'be able to serialize collections containing strings with non-UTF8 characters to JSON' do
+      ascii = "\xC2\xA0".force_encoding('ascii-8bit')
+      time = DateTime.now
+      ascii_values = { :array => [ascii], :datetime => time, :fixnum => 1, :string => ascii }
+      utf8_values = { :array => [ascii.force_encoding("UTF-8")], :datetime => time, :fixnum => 1, :string => ascii.force_encoding("UTF-8") }
+      out = @pipe.pipe({ :hash => ascii_values })
+      assert_equal 1, out.count
+      assert_equal JSON.generate(utf8_values), out[:hash]
+    end
+
     should 'not serialize other fields' do
       value = 1.5
       attributes = { :fixnum => value }
