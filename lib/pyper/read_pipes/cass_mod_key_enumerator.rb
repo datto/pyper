@@ -23,7 +23,7 @@ module Pyper::ReadPipes
     def pipe(arguments, status = {})
       (Enumerator.new do |yielder|
          (0..mod_size).each do |mod_id|
-           options = { :page_size => @page_size }
+           options = { :page_size => page_size }
            paging_state = nil
            loop do
              options[:paging_state] = paging_state if paging_state.present?
