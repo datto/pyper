@@ -9,11 +9,13 @@ module Pyper::ReadPipes
     # @param [Symbol] the name of the cassandra table to fetch data from
     # @param [Cassava::Client]
     # @param [Integer] the mod size
-    attr_reader :table, :client, :mod_size
-    def initialize(table, client, mod_size = 100)
+    # @param [Integer] the page size
+    attr_reader :table, :client, :mod_size, :page_size
+    def initialize(table, client, mod_size = 100, page_size = 1000)
       @table = table
       @client = client
       @mod_size = mod_size
+      @page_size = page_size
     end
 
     # @param [Hash] arguments
@@ -21,8 +23,16 @@ module Pyper::ReadPipes
     def pipe(arguments, status = {})
       (Enumerator.new do |yielder|
          (0..mod_size).each do |mod_id|
-           result = client.select(table).where(arguments.merge(:mod_key => mod_id)).execute
-           result.each { |item| yielder << item }
+           options = { :page_size => @page_size }
+           paging_state = nil
+           loop do
+             options[:paging_state] = paging_state if paging_state.present?
+             result = client.select(table).where(arguments.merge(:mod_key => mod_id)).execute(options)
+             result.each { |item| yielder << item }
+
+             break if result.last_page?
+             paging_state = result.paging_state
+           end
          end
        end).lazy
     end

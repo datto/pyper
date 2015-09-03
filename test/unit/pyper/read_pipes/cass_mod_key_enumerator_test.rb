@@ -26,6 +26,13 @@ module Pyper::ReadPipes
         assert_equal %w(1 2 3).to_set, result.map { |i| i['val'] }.to_set
       end
 
+      should 'page through cassandra result and return all items' do
+        paging_pipe = CassModKeyEnumerator.new(:mod_test, @client, mod_size = 4, page_size = 1)
+        result = paging_pipe.pipe(row: 1).to_a
+        assert_equal 3, result.size
+        assert_equal %w(1 2 3).to_set, result.map { |i| i['val'] }.to_set
+      end
+
       should 'not return items with a mod key outside the mod key range' do
         @client.insert(:mod_test, {row: 1, id: 'idz', mod_key: 99, val: '1'})
         result = @pipe.pipe(row: 1).to_a
