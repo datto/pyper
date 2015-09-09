@@ -22,7 +22,7 @@ module Pyper::ReadPipes
     # @return [Enumerator::Lazy<Hash>] enumerator of items from all rows
     def pipe(arguments, status = {})
       (Enumerator.new do |yielder|
-         (0..mod_size).each do |mod_id|
+         (0...mod_size).each do |mod_id|
            options = { :page_size => page_size }
            paging_state = nil
            loop do
