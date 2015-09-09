@@ -34,7 +34,7 @@ module Pyper::ReadPipes
       end
 
       should 'not return items with a mod key outside the mod key range' do
-        @client.insert(:mod_test, {row: 1, id: 'idz', mod_key: 99, val: '1'})
+        @client.insert(:mod_test, {row: 1, id: 'idz', mod_key: 4, val: '1'})
         result = @pipe.pipe(row: 1).to_a
         assert_equal 3, result.size
       end
