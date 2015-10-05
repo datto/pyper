@@ -7,7 +7,7 @@ group :development, :test do
   gem "pry"
   gem "awesome_print"
   gem 'm', :git => 'git@github.com:ANorwell/m.git', :branch => 'minitest_5'
-  gem 'cass_schema', :git => 'git@github.com:backupify/cass_schema.git'
+  gem 'cass_schema', :git => 'git@github.com:backupify/cass_schema.git', :tag => "0.0.4"
 
   # make sure to use v2.0.1 to avoid issues with super column families
   gem 'cassandra-driver', :git => 'git@github.com:datastax/ruby-driver.git', :tag => 'v2.0.1'

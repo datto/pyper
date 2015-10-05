@@ -12,7 +12,7 @@ module Pyper::ReadPipes
       content =
         begin
           strategy.read
-        rescue Errno::ENOENT
+        rescue Errno::ENOENT, StorageStrategy::NotFound
           nil
         end
       attributes.merge!(storage_field => content)
