@@ -68,6 +68,7 @@ module Pyper::ReadPipes
           assert_equal({'a' => '1'}, out.first)
           assert_equal({'a' => '2'}, out.last)
         end
+        
         should  "select all columns when columns argument not given" do
           out = @pipe.pipe({id: 'id'}).to_a
           assert_equal({ "id" => "id", "a" => "1", "b" => "b" }, out.first)
