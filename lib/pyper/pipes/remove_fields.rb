@@ -6,7 +6,7 @@ module Pyper::Pipes
 
     # @param [Array] fields to be removed from pipe
     def initialize(fields_to_remove)
-      @fields_to_remove = fields_to_remove
+      @fields_to_remove = Array.wrap(fields_to_remove)
     end
 
     # @param [Enumerator] attributes in pipe
