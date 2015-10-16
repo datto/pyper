@@ -61,6 +61,19 @@ module Pyper::ReadPipes
         assert_equal '2', out.first['a']
         assert_equal false, status[:last_page]
       end
+
+      context "columns selecting" do
+        should "only select given columns from columns argument" do
+          out = @pipe.pipe({id: 'id', :columns => [:a]}).to_a
+          assert_equal({'a' => '1'}, out.first)
+          assert_equal({'a' => '2'}, out.last)
+        end
+        
+        should  "select all columns when columns argument not given" do
+          out = @pipe.pipe({id: 'id'}).to_a
+          assert_equal({ "id" => "id", "a" => "1", "b" => "b" }, out.first)
+        end
+      end
     end
   end
 end

@@ -15,10 +15,11 @@ module Pyper::ReadPipes
       page_size = arguments.delete(:page_size)
       paging_state = arguments.delete(:paging_state)
       order = arguments.delete(:order)
+      columns = arguments.delete(:columns)
 
       opts = (options || {}).merge({ page_size: page_size, paging_state: paging_state})
 
-      query = client.select(table).where(arguments)
+      query = client.select(table, columns).where(arguments)
       query = query.limit(limit) if limit
       query = query.order(order.first, order.last) if order
 
