@@ -8,7 +8,7 @@ module Pyper::ReadPipes
                       :array => Array,
                       :hash => Hash,
                       :int => Integer,
-                      :fixnum => Fixnum,
+                      :float => Float,
                       :other => String
                      }
       @pipe = AttributeDeserializer.new(type_mapping)
@@ -40,10 +40,10 @@ module Pyper::ReadPipes
 
     should 'deserialize fixnums' do
       value = 1.5
-      item = { :fixnum => value.to_s }
+      item = { :float => value.to_s }
       out = @pipe.pipe([item])
       assert_equal 1, out.count
-      assert_equal value, out.first[:fixnum]
+      assert_equal value, out.first[:float]
     end
 
     should 'not deserialize other fields' do
@@ -52,6 +52,18 @@ module Pyper::ReadPipes
       out = @pipe.pipe([item])
       assert_equal 1, out.count
       assert_equal value, out.first[:other]
+    end
+
+    should 'not modify original values when deserializng' do
+      value = [1,2,3]
+      item = { :array => JSON.generate(value) }
+      out = @pipe.pipe([item])
+      assert_equal 1, out.count
+      assert_equal value, out.first[:array]
+
+      # This throws an error if we have modified the original values
+      out = @pipe.pipe([item])
+      assert_equal value, out.first[:array]
     end
   end
 end

@@ -1,4 +1,4 @@
-require_relative '../../../test_helper'
+require 'test_helper'
 
 module Pyper::WritePipes
   class CassandraWriterTest < Minitest::Should::TestCase
