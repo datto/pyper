@@ -1,8 +1,6 @@
-require_relative '../../../test_helper'
+require 'test_helper'
 require 'json'
 require 'virtus'
-
-require 'awesome_print'
 
 module Pyper::ReadPipes
   class VirtusDeserializerTest < Minitest::Should::TestCase
@@ -13,7 +11,7 @@ module Pyper::ReadPipes
       attribute :array, Array[String]
       attribute :hash, Hash
       attribute :int, Integer
-      attribute :fixnum, Float
+      attribute :float, Float
       attribute :other, String
     end
 
@@ -46,12 +44,12 @@ module Pyper::ReadPipes
       assert_equal value, out.first['int']
     end
     
-    should 'deserialize fixnums' do
+    should 'deserialize flats' do
       value = 1.5
-      item = { 'fixnum' => value.to_s }
+      item = { 'float' => value.to_s }
       out = @pipe.pipe([item])
       assert_equal 1, out.count
-      assert_equal value, out.first['fixnum']
+      assert_equal value, out.first['float']
     end
     
     should 'not deserialize other fields' do
