@@ -44,7 +44,7 @@ module Pyper::ReadPipes
       assert_equal value, out.first['int']
     end
     
-    should 'deserialize flats' do
+    should 'deserialize floats' do
       value = 1.5
       item = { 'float' => value.to_s }
       out = @pipe.pipe([item])
