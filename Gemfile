@@ -17,6 +17,7 @@ group :test do
   gem 'minitest_should', :git => 'git@github.com:citrus/minitest_should.git'
   gem "google-api-client", "0.7.1"
   gem "mocha"
+  gem 'virtus'
 end
 
 gem 'storage_strategy', :git => 'git@github.com:backupify/storage_strategy.git'

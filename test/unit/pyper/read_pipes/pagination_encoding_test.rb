@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../../../test_helper'
 
 module Pyper::ReadPipes
   class PaginationEncodingTest < Minitest::Should::TestCase
