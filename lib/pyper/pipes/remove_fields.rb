@@ -12,6 +12,7 @@ module Pyper::Pipes
     # @param [Enumerator] attributes in pipe
     # @return [Enumerator] items in pipe
     def pipe(attributes, status = {})
+      attributes = attributes.dup
       fields_to_remove.each { |field| attributes.delete(field) }
 
       attributes
