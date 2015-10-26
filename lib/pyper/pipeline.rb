@@ -25,7 +25,16 @@ module Pyper
   class PipeStatus < Struct.new(:value, :status); end
 
   class Pipeline
+    class << self
+      def create
+        new.tap do |pl|
+          pl.instance_eval &Proc.new if block_given?
+        end
+      end
+    end
+
     attr_reader :pipes
+
     def initialize(pipes = [])
       @pipes = pipes
     end
@@ -35,6 +44,8 @@ module Pyper
       pipes << pipe
       self
     end
+
+    alias_method :add, :<<
 
     # Insert something into the pipeline to be processed
     # @param [Object] The original input data to enter the pipeline. This may be mutated by each pipe in the pipeline.
