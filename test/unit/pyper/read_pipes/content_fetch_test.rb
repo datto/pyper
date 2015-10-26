@@ -6,7 +6,7 @@ module Pyper::ReadPipes
 
       setup do
         @dir = Dir.mktmpdir
-        @storage_builder = lambda do |attributes|
+        @storage_builder = lambda do |item|
           StorageStrategy.get("#{@dir}/content",
             filters: [:size, :checksum],
             size: { metadata_key: :raw_size },
@@ -25,13 +25,13 @@ module Pyper::ReadPipes
         content = 'asdf'
         @strategy.write(content)
 
-        attributes = @pipe.pipe({})
-        assert_equal content, attributes[:content]
+        attributes = @pipe.pipe([{}])
+        assert_equal content, attributes.first[:content]
       end
 
       should 'add nothing if there is no content to store' do
-        attributes = @pipe.pipe({})
-        refute @content, attributes[:content]
+        attributes = @pipe.pipe([{}])
+        refute @content, attributes.first[:content]
       end
     end
   end

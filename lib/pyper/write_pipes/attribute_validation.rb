@@ -29,6 +29,9 @@ module Pyper::WritePipes
       @restricted = opts[:restricted]
     end
 
+    # @param attributes [Hash] The un-validated attributes
+    # @param status [Hash] The mutable status field
+    # @return [Hash] The original attributes
     def pipe(attributes, status = {})
       if allowed.present?
         attributes.keys.each do |attr|

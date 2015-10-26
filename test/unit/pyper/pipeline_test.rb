@@ -41,5 +41,29 @@ module Pyper
         assert pl.pipes.include? el
       end
     end
+
+    context '#push' do
+      should 'accept pipes that respond to #pipe' do
+        pl = Pyper::Pipeline.create do
+          add ExamplePipe
+        end
+        res = pl.push({})
+        assert res.status[:called]
+      end
+
+      should 'accept pipes that respond to #call' do
+        pl = Pyper::Pipeline.create do
+          add ->(attrs, status = {}) { status[:called] = true  }
+        end
+        res = pl.push({})
+        assert res.status[:called]
+      end
+    end
+
+    class ExamplePipe
+      def self.pipe(attrs, status = {})
+        status[:called] = true
+      end
+    end
   end
 end
