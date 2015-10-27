@@ -11,13 +11,14 @@ data access patterns can be created.
 Create a pipeline composed of a set of pipes:
 
 ```ruby
-write_pipeline = Pyper::Pipeline.new <<
-   Pyper::WritePipes::AttributeSerializer.new <<
-   Pyper::Pipes::FieldRename.new(:to => :to_emails, :from => :from_email) <<
-   Pyper::Pipes::ModKey.new <<
-   Pyper::WritePipes::CassandraWriter.new(:table_1, metadata_client) <<
-   Pyper::WritePipes::CassandraWriter.new(:table_2, indexes_client) <<
-   Pyper::WritePipes::CassandraWriter.new(:table_3, indexes_client)
+write_pipeline = Pyper::Pipeline.create do
+   add Pyper::WritePipes::AttributeSerializer.new
+   add Pyper::Pipes::FieldRename.new(:to => :to_emails, :from => :from_email)
+   add Pyper::Pipes::ModKey.new
+   add Pyper::WritePipes::CassandraWriter.new(:table_1, metadata_client)
+   add Pyper::WritePipes::CassandraWriter.new(:table_2, indexes_client)
+   add Pyper::WritePipes::CassandraWriter.new(:table_3, indexes_client)
+end
 ```
 
 Then, push data down the pipe:
@@ -44,13 +45,14 @@ to read data from an external source. This data may then be transformed by the p
 deserialization or data mapping operations.
 
 ```ruby
-read_pipeline = Pyper::Pipeline.new <<
-   Pyper::ReadPipes::PaginationDecoding.new <<
-   Pyper::ReadPipes::CassandraItems.new(:table, indexes_client) <<
-   Pyper::Pipes::FieldRename.new(:to_emails => :to, :from_email => :from) <<
-   Pyper::ReadPipes::PaginationEncoding.new <<
-   Pyper::ReadPipes::VirtusDeserializer.new(message_attributes) <<
-   Pyper::ReadPipes::VirtusParser.new(MyModelClass)
+read_pipeline = Pyper::Pipeline.create do
+   add Pyper::ReadPipes::PaginationDecoding.new
+   add Pyper::ReadPipes::CassandraItems.new(:table, indexes_client)
+   add Pyper::Pipes::FieldRename.new(:to_emails => :to, :from_email => :from)
+   add Pyper::ReadPipes::PaginationEncoding.new
+   add Pyper::ReadPipes::VirtusDeserializer.new(message_attributes)
+   add Pyper::ReadPipes::VirtusParser.new(MyModelClass)
+end
 
 result = read_pipeline.push(:row => '1', :id => 'i', :page_token => 'sdf')
 result.value # Enumerator with matching instances of MyModelClass
@@ -63,13 +65,23 @@ sensible for the `PaginationDecoding` pipe to come after the `CassandraItems` pi
 
 ### Creating and using pipelines
 
-A pipeline is an instance of `Pyper::Pipeline`, to which pipes are appended using the `<<` operator.
+A pipeline is an instance of `Pyper::Pipeline`, to which pipes are appended using the `<<` or `add` operators.
 
 ```ruby
 my_pipeline = Pyper::Pipeline.new <<
    Pyper::ReadPipes::PaginationDecoding.new <<
-   Pyper::ReadPipes::CassandraItems.new(:table, indexes_client)
+   Pyper::ReadPipes::CassandraItems.new(:table, indexes_client) <<
    Pyper::ReadPipes::PaginationEncoding.new
+```
+
+However, the `create` method makes pipeline construction easier. The above example becomes the following:
+
+```ruby
+my_pipeline = Pyper::Pipeline.create do
+   add Pyper::ReadPipes::PaginationDecoding.new
+   add Pyper::ReadPipes::CassandraItems.new(:table, indexes_client)
+   add Pyper::ReadPipes::PaginationEncoding.new
+end
 ```
 
 To invoke the pipeline, use the `push` method and provide the data to enter the pipeline:
@@ -84,12 +96,12 @@ contains metadata about the push operation that might be created by each pipe in
 
 ### Creating new pipes
 
-A pipe must implement the pipe method, which takes two arguments: the object entering the pipe, as well as the status. It
+A pipe must implement the `call` method, which takes two arguments: the object entering the pipe, as well as the status. It
 should return the object leaving the pipe:
 
 ```ruby
 class MyPipe
-  def pipe(attributes, status)
+  def call(attributes, status = {})
     attributes[:c] = attributes[:a] + attributes[:b]
     status[:processed_by_my_pipe] = true
     attributes
@@ -97,7 +109,9 @@ class MyPipe
 end
 ```
 
-This example pipe modifies `attributes` before returning it. It also sets a flag on the status object.
+This example pipe above modifies `attributes` before returning it. It also sets a flag on the status object.
+
+Note that because the pipe need only respond to `call`, lambdas and procs are valid pipes. 
 
 Generally, pipes in a write pipeline operate on an attributes hash (containing the attributes meant to be written to a data
 store). Pipes in a read pipeline initially might modify arguments. A data retrieval pipe would then use the arguments to
@@ -106,7 +120,7 @@ something like:
 
 ```ruby
 class Deserialize
-  def pipe(items, status)
+  def call(items, status = {})
      items.map { |item| deserialize(item) }
   end
 
@@ -121,7 +135,7 @@ end
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'pyper'
+gem 'pyper', :git => 'git@github.com:backupify/pyper.git'
 ```
 
 And then execute:
@@ -134,7 +148,7 @@ Or install it yourself as:
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/pyper/fork )
+1. Fork it ( https://github.com/backupify/pyper/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
