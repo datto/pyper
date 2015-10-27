@@ -1,7 +1,11 @@
 require 'json'
 
 module Pyper::ReadPipes
-  # @param [Hash<Symbol, Class>] A map from field names to types. fields will be deserialized according to these types.
+  # Provides a way to deserialize serialized fields from an item. This is intended to be used with a Virtus
+  # model class, and will use the attribute names and type information from that model to determine how to
+  # deserialize.
+  #
+  # All serialization is as JSON.
   class VirtusDeserializer
 
     attr_reader :type_mapping
@@ -11,7 +15,8 @@ module Pyper::ReadPipes
       @type_mapping = Hash[attribute_set.map { |attr| [attr.name.to_s, attr.type.primitive] }]
     end
 
-    # @param [Enumerator<Hash>] A list of items
+    # @param items [Enumerator<Hash>] A list of items
+    # @param status [Hash] The mutable status field
     # @return [Enumerator<Hash>] A list of items, deserialized according to the type mapping
     def pipe(items, status = {})
       items.map do |item|

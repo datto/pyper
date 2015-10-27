@@ -4,11 +4,12 @@ module Pyper::ReadPipes
   # @param [Cassava::Client] client to query cassandra with
   # @param [Hash] Additional/default options to pass to the Cassava execute statement.
   class CassandraItems < Struct.new(:table, :client, :options)
-    # @param [Hash] arguments
-    # @option [Integer] limit
-    # @option [Array] order A pair [clustering_column, :desc|:asc] determining how to order the results.
-    # @option [Object] paging_state
-    # @option [Integer] page_size
+    # @param arguments [Hash] Arguments passed to the cassandra client where statement
+    # @option arguments [Integer] :limit
+    # @option arguments [Array] :order A pair [clustering_column, :desc|:asc] determining how to order the results.
+    # @option arguments [Object] :paging_state
+    # @option arguments [Integer] :page_size
+    # @param status [Hash] The mutable status field
     # @return [Enumerator::Lazy<Hash>] enumerator of items
     def pipe(arguments, status = {})
       limit = arguments.delete(:limit)

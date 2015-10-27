@@ -1,7 +1,12 @@
 require 'json'
 
 module Pyper::WritePipes
+  # Provides a way to serialize attributes to JSON.
   class AttributeSerializer
+
+    # @param attributes [Hash] Unserialized attributes
+    # @param status [Hash] The mutable status field
+    # @return [Hash] The serialized attributes
     def pipe(attributes, status = {})
       attributes.each_with_object({}) do |attr, serialized_attrs|
         value = force_encode_to_UTF8(attr.last)

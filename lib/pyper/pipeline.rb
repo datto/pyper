@@ -39,7 +39,7 @@ module Pyper
       @pipes = pipes
     end
 
-    # @param [#pipe] A pipe to append to the pipeline
+    # @param pipe [#pipe|#call] A pipe to append to the pipeline
     def <<(pipe)
       pipes << pipe
       self
@@ -48,11 +48,18 @@ module Pyper
     alias_method :add, :<<
 
     # Insert something into the pipeline to be processed
-    # @param [Object] The original input data to enter the pipeline. This may be mutated by each pipe in the pipeline.
-    # @param [Hash] A status hash that may be updated by the pipeline
+    # @param input [Object] The original input data to enter the pipeline. This may be mutated by each pipe in the pipeline.
+    # @return [PipeStatus] the pipe status, containing both the value and a status hash.
     def push(input)
       status = {}
-      value = pipes.inject(input) { |attributes, p| p.pipe(attributes, status) }
+      value = pipes.inject(input) do |attributes, p|
+        if p.respond_to?(:call)
+          p.call(attributes, status)
+        else
+          p.pipe(attributes, status)
+        end
+      end
+
       PipeStatus.new(value, status)
     end
   end

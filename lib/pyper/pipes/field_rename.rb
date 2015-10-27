@@ -1,6 +1,10 @@
 module Pyper::Pipes
-  # @param [Hash] A map of old field names to new field names, which will be used to rename attributes.
+  # @param attr_map [Hash] A map of old field names to new field names, which will be used to rename attributes.
   class FieldRename < Struct.new(:attr_map)
+
+    # @param args [Hash|Enumerator<Hash>] One or more item hashes
+    # @param status [Hash] The mutable status field
+    # @return [Hash|Enumerator<Hash>] The item(s) with fields renamed
     def pipe(attrs_or_items, status = {})
       case attrs_or_items
       when Hash then rename(attrs_or_items)

@@ -1,9 +1,11 @@
 require 'json'
 
 module Pyper::ReadPipes
-  # @param [Hash<Symbol, Class>] A map from field names to types. fields will be deserialized according to these types.
+  # @param type_mapping [Hash<Symbol, Class>] A map from field names to types. fields will be deserialized according
+  # to these types.
   class AttributeDeserializer < Struct.new(:type_mapping)
-    # @param [Enumerable<Hash>] A list of items
+    # @param items [Enumerable<Hash>] A list of items
+    # @param status [Hash] The mutable status field
     # @return [Enumerable<Hash>] A list of items, deserialized according to the type mapping
     def pipe(items, status = {})
       items.map do |item|

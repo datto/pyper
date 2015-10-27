@@ -6,10 +6,10 @@ module Pyper::ReadPipes
   # For example, if mod_size is 100, it will read the 100 rows with mod_key between 0 and 99.
   class CassModKeyEnumerator
 
-    # @param [Symbol] the name of the cassandra table to fetch data from
-    # @param [Cassava::Client]
-    # @param [Integer] the mod size
-    # @param [Integer] the page size
+    # @param table [Symbol] the name of the cassandra table to fetch data from
+    # @param client [Cassava::Client]
+    # @param mod_size [Integer] the mod size
+    # @param page_size [Integer] the page size
     attr_reader :table, :client, :mod_size, :page_size
     def initialize(table, client, mod_size = 100, page_size = 1000)
       @table = table
@@ -18,7 +18,8 @@ module Pyper::ReadPipes
       @page_size = page_size
     end
 
-    # @param [Hash] arguments
+    # @param arguments [Hash] Arguments passed to the cassandra client where statement
+    # @param status [Hash] The mutable status field
     # @return [Enumerator::Lazy<Hash>] enumerator of items from all rows
     def pipe(arguments, status = {})
       (Enumerator.new do |yielder|
