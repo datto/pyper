@@ -7,8 +7,7 @@ module Pyper::DeletePipes
     # @param args [Hash] Should contain the primary keys to delete. Can contain a :columns key to remove specific values.
     # @param status [Hash] The mutable status field
     # @return [Hash] The original attributes
-    # @return [Cassandra::Result] the Cass result
-  def pipe(arguments, status = {})
+    def pipe(arguments, status = {})
       local_args = arguments.dup
       columns = local_args.delete(:columns)
 
