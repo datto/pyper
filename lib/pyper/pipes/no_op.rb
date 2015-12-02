@@ -5,7 +5,7 @@ module Pyper::Pipes
   #   (some condition) ? some_pipe(conent) : Pyper::Pipes::NoOp
   class NoOp
 
-    # @param args [Object]
+    # @param attrs_or_items [Object]
     # @param status [Hash] The mutable status field
     # @return [Object]
     def self.pipe(attrs_or_items, status = {})
