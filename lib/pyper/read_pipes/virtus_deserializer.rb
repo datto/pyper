@@ -10,7 +10,7 @@ module Pyper::ReadPipes
 
     attr_reader :type_mapping
 
-    # @ param [Virtus::AttributeSet] A Virtus AttributeSet
+    # @param attribute_set [Virtus::AttributeSet] A Virtus AttributeSet
     def initialize(attribute_set)
       @type_mapping = Hash[attribute_set.map { |attr| [attr.name.to_s, attr.type.primitive] }]
     end
