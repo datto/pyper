@@ -14,6 +14,18 @@ module Pyper
           assert pl.pipes.include? el
         end
 
+        should 'allow access to externally defined methods' do
+          def external
+            'external'
+          end
+
+          pl = Pyper::Pipeline.create do
+            add external
+          end
+
+          assert pl.pipes.include? external
+        end
+
         should 'return a new pipeline' do
           pl = Pyper::Pipeline.create do
             add 'hello'

@@ -28,9 +28,18 @@ module Pyper
 
   class Pipeline
     class << self
-      def create
-        new.tap do |pl|
-          pl.instance_eval &Proc.new if block_given?
+
+      # Provides an interface for creating a pipeline. The provided block will be called
+      # in the context of a newly-created pipeline, to which pipes can be added using #add.
+      # @return [Pyper::Pipeline] The created pipeline.
+      def create(&block)
+        new.tap do |pipeline|
+          if block_given?
+            original_self = eval('self', block.binding)
+            pipeline.instance_variable_set(:@original_self, original_self)
+            pipeline.instance_eval(&block)
+            pipeline.remove_instance_variable(:@original_self)
+          end
         end
       end
     end
@@ -63,6 +72,14 @@ module Pyper
       end
 
       PipeStatus.new(value, status)
+    end
+
+    def method_missing(sym, *args, &block)
+      @original_self ? @original_self.send(sym, *args, &block) : super
+    end
+
+    def respond_to_missing?(sym, include_all = false)
+      @original_self ? @original_self.respond_to?(sym, include_all) : super
     end
   end
 end
