@@ -1,4 +1,4 @@
-module Pyper::Pipes
+module Pyper::Pipes::Cassandra
   # Adds the :mod_key field to the output attributes, which is based on the hash of
   # a particular field in the input attributes.
   # @example

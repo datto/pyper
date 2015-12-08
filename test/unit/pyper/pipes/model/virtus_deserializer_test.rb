@@ -2,7 +2,7 @@ require 'test_helper'
 require 'json'
 require 'virtus'
 
-module Pyper::Pipes::Read
+module Pyper::Pipes::Model
   class VirtusDeserializerTest < Minitest::Should::TestCase
 
     class TestVirtus

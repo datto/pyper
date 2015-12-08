@@ -1,4 +1,4 @@
-module Pyper::Pipes::Write
+module Pyper::Pipes::Model
   class AttributeValidation
 
     # Raised when validation fails.

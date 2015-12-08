@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'json'
 
-module Pyper::Pipes::Write
+module Pyper::Pipes::Model
   class AttributeSerializerTest < Minitest::Should::TestCase
     setup do
       @pipe = AttributeSerializer.new

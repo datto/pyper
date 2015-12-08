@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Pyper::Pipes::Write
+module Pyper::Pipes::Model
   class AttributeValidationTest < Minitest::Should::TestCase
     context "pipe" do
       context "with required attributes" do

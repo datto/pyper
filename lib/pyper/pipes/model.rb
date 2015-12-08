@@ -1,0 +1,5 @@
+require_relative 'model/attribute_serializer'
+require_relative 'model/attribute_validation'
+require_relative 'model/attribute_deserializer'
+require_relative 'model/virtus_deserializer'
+require_relative 'model/virtus_parser'

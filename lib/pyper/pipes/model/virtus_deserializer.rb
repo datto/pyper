@@ -1,6 +1,6 @@
 require 'json'
 
-module Pyper::Pipes::Read
+module Pyper::Pipes::Model
   # Provides a way to deserialize serialized fields from an item. This is intended to be used with a Virtus
   # model class, and will use the attribute names and type information from that model to determine how to
   # deserialize.

@@ -1,5 +1,6 @@
 require_relative 'cassandra/reader'
 require_relative 'cassandra/writer'
+require_relative 'cassandra/mod_key'
 require_relative 'cassandra/mod_key_reader'
 require_relative 'cassandra/deleter'
 require_relative 'cassandra/pagination_decoding'

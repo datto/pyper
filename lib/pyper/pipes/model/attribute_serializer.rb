@@ -1,6 +1,6 @@
 require 'json'
 
-module Pyper::Pipes::Write
+module Pyper::Pipes::Model
   # Provides a way to serialize attributes to JSON.
   class AttributeSerializer
 

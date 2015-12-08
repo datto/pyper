@@ -12,6 +12,7 @@ Require the pyper library and the pipes that you need:
 
 ```ruby
 require 'pyper'
+require 'pyper/model'  # Import model-related pipes
 require 'pyper/cassandra'  # Import Cassandra-related pipes
 require 'pyper/content'    # Import content storage-related pipes
 ```
@@ -57,11 +58,11 @@ deserialization or data mapping operations.
 ```ruby
 read_pipeline = Pyper::Pipeline.create do
    add Pyper::Pipes::Cassandra::PaginationDecoding.new
-   add Pyper::Pipes::Read::Reader.new(:table, indexes_client)
+   add Pyper::Pipes::Cassandra::Reader.new(:table, indexes_client)
    add Pyper::Pipes::FieldRename.new(:to_emails => :to, :from_email => :from)
    add Pyper::Pipes::Cassandra::PaginationEncoding.new
-   add Pyper::Pipes::Read::VirtusDeserializer.new(message_attributes)
-   add Pyper::Pipes::Read::VirtusParser.new(MyModelClass)
+   add Pyper::Pipes::Model::VirtusDeserializer.new(message_attributes)
+   add Pyper::Pipes::Model::VirtusParser.new(MyModelClass)
 end
 
 result = read_pipeline.push(:row => '1', :id => 'i', :page_token => 'sdf')
@@ -89,7 +90,7 @@ However, the `create` method makes pipeline construction easier. The above examp
 ```ruby
 my_pipeline = Pyper::Pipeline.create do
    add Pyper::Pipes::Cassandra::PaginationDecoding.new
-   add Pyper::Pipes::Cassandra::Items.new(:table, indexes_client)
+   add Pyper::Pipes::Cassandra::Reader.new(:table, indexes_client)
    add Pyper::Pipes::Cassandra::PaginationEncoding.new
 end
 ```

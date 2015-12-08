@@ -1,6 +1,6 @@
 require 'json'
 
-module Pyper::Pipes::Read
+module Pyper::Pipes::Model
   # @param type_mapping [Hash<Symbol, Class>] A map from field names to types. fields will be deserialized according
   # to these types.
   class AttributeDeserializer < Struct.new(:type_mapping)

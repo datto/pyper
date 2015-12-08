@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'json'
 
-module Pyper::Pipes::Read
+module Pyper::Pipes::Model
   class AttributeDeserializerTest < Minitest::Should::TestCase
     setup do
       type_mapping = {
