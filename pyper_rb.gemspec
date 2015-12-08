@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'pyper/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "pyper"
+  spec.name          = "pyper_rb"
   spec.version       = Pyper::VERSION
   spec.authors       = ["Arron Norwell"]
   spec.email         = ["anorwell@datto.com"]
