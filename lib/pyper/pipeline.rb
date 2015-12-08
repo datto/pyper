@@ -1,26 +1,4 @@
-require_relative 'write_pipes/cassandra_writer'
-require_relative 'write_pipes/attribute_serializer'
-require_relative 'write_pipes/attribute_validation'
-require_relative 'write_pipes/content_storage'
-
-require_relative 'read_pipes/content_fetch'
-require_relative 'read_pipes/cassandra_items'
-require_relative 'read_pipes/attribute_deserializer'
-require_relative 'read_pipes/virtus_deserializer'
-require_relative 'read_pipes/virtus_parser'
-require_relative 'read_pipes/cass_mod_key_enumerator'
-require_relative 'read_pipes/pagination_decoding'
-require_relative 'read_pipes/pagination_encoding'
-require_relative 'read_pipes/force_enumerator'
-
-require_relative 'delete_pipes/cassandra_deleter'
-
-# pipes that can be used for both reading and writing
-require_relative 'pipes/mod_key'
-require_relative 'pipes/field_rename'
-require_relative 'pipes/default_values'
-require_relative 'pipes/no_op'
-require_relative 'pipes/remove_fields'
+require_relative 'pipes'
 
 module Pyper
 
