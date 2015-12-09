@@ -111,7 +111,7 @@ end
 
 This example pipe above modifies `attributes` before returning it. It also sets a flag on the status object.
 
-Note that because the pipe need only respond to `call`, lambdas and procs are valid pipes. 
+Note that because the pipe need only respond to `call`, lambdas and procs are valid pipes.
 
 Generally, pipes in a write pipeline operate on an attributes hash (containing the attributes meant to be written to a data
 store). Pipes in a read pipeline initially might modify arguments. A data retrieval pipe would then use the arguments to
@@ -135,7 +135,7 @@ end
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'pyper', :git => 'git@github.com:backupify/pyper.git'
+gem 'pyper_rb', :git => 'git@github.com:backupify/pyper.git'
 ```
 
 And then execute:
@@ -144,7 +144,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install pyper
+    $ gem install pyper_rb
 
 ## Contributing
 
