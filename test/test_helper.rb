@@ -28,7 +28,7 @@ def create_cass_client(datastore_name)
 end
 
 
-require 'pyper'
+require 'pyper/all'
 require 'storage_strategy'
 require 'cass_schema'
 require 'cassava'

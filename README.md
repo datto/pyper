@@ -8,16 +8,27 @@ data access patterns can be created.
 
 ## Usage
 
+Require the pyper library and the pipes that you need:
+
+```ruby
+require 'pyper'
+require 'pyper/model'  # Import model-related pipes
+require 'pyper/cassandra'  # Import Cassandra-related pipes
+require 'pyper/content'    # Import content storage-related pipes
+```
+
+Or, import the entire library using `require 'pyper/all'`
+
 Create a pipeline composed of a set of pipes:
 
 ```ruby
 write_pipeline = Pyper::Pipeline.create do
-   add Pyper::WritePipes::AttributeSerializer.new
+   add Pyper::Pipes::Write::AttributeSerializer.new
    add Pyper::Pipes::FieldRename.new(:to => :to_emails, :from => :from_email)
    add Pyper::Pipes::ModKey.new
-   add Pyper::WritePipes::CassandraWriter.new(:table_1, metadata_client)
-   add Pyper::WritePipes::CassandraWriter.new(:table_2, indexes_client)
-   add Pyper::WritePipes::CassandraWriter.new(:table_3, indexes_client)
+   add Pyper::Pipes::Cassandra::Writer.new(:table_1, metadata_client)
+   add Pyper::Pipes::Cassandra::Writer.new(:table_2, indexes_client)
+   add Pyper::Pipes::Cassandra::Writer.new(:table_3, indexes_client)
 end
 ```
 
@@ -46,22 +57,22 @@ deserialization or data mapping operations.
 
 ```ruby
 read_pipeline = Pyper::Pipeline.create do
-   add Pyper::ReadPipes::PaginationDecoding.new
-   add Pyper::ReadPipes::CassandraItems.new(:table, indexes_client)
+   add Pyper::Pipes::Cassandra::PaginationDecoding.new
+   add Pyper::Pipes::Cassandra::Reader.new(:table, indexes_client)
    add Pyper::Pipes::FieldRename.new(:to_emails => :to, :from_email => :from)
-   add Pyper::ReadPipes::PaginationEncoding.new
-   add Pyper::ReadPipes::VirtusDeserializer.new(message_attributes)
-   add Pyper::ReadPipes::VirtusParser.new(MyModelClass)
+   add Pyper::Pipes::Cassandra::PaginationEncoding.new
+   add Pyper::Pipes::Model::VirtusDeserializer.new(message_attributes)
+   add Pyper::Pipes::Model::VirtusParser.new(MyModelClass)
 end
 
 result = read_pipeline.push(:row => '1', :id => 'i', :page_token => 'sdf')
 result.value # Enumerator with matching instances of MyModelClass
 ```
 
-Note that pipe order matters. In the example read pipe above, `PaginationDecoding` decodes pagination options, thus
-performing an operation on the initial options provided. The `CassandraItems` pipe uses the options to retrieve items from
+Note that pipe order matters. In the example read pipe above, `Cassandra::PaginationDecoding` decodes pagination options, thus
+performing an operation on the initial options provided. The `Cassandra::Reader` pipe uses the options to retrieve items from
 Cassandra, and subsequent elements of the pipeline are designed to transform this retrieved data. Thus, it would not be
-sensible for the `PaginationDecoding` pipe to come after the `CassandraItems` pipe.
+sensible for the `Cassandra::PaginationDecoding` pipe to come after the `Cassandra::Reader` pipe.
 
 ### Creating and using pipelines
 
@@ -69,18 +80,18 @@ A pipeline is an instance of `Pyper::Pipeline`, to which pipes are appended usin
 
 ```ruby
 my_pipeline = Pyper::Pipeline.new <<
-   Pyper::ReadPipes::PaginationDecoding.new <<
-   Pyper::ReadPipes::CassandraItems.new(:table, indexes_client) <<
-   Pyper::ReadPipes::PaginationEncoding.new
+   Pyper::Pipes::Cassandra::PaginationDecoding.new <<
+   Pyper::Pipes::Cassandra::Reader.new(:table, indexes_client) <<
+   Pyper::Pipes::Cassandra::PaginationEncoding.new
 ```
 
 However, the `create` method makes pipeline construction easier. The above example becomes the following:
 
 ```ruby
 my_pipeline = Pyper::Pipeline.create do
-   add Pyper::ReadPipes::PaginationDecoding.new
-   add Pyper::ReadPipes::CassandraItems.new(:table, indexes_client)
-   add Pyper::ReadPipes::PaginationEncoding.new
+   add Pyper::Pipes::Cassandra::PaginationDecoding.new
+   add Pyper::Pipes::Cassandra::Reader.new(:table, indexes_client)
+   add Pyper::Pipes::Cassandra::PaginationEncoding.new
 end
 ```
 
@@ -111,7 +122,7 @@ end
 
 This example pipe above modifies `attributes` before returning it. It also sets a flag on the status object.
 
-Note that because the pipe need only respond to `call`, lambdas and procs are valid pipes. 
+Note that because the pipe need only respond to `call`, lambdas and procs are valid pipes.
 
 Generally, pipes in a write pipeline operate on an attributes hash (containing the attributes meant to be written to a data
 store). Pipes in a read pipeline initially might modify arguments. A data retrieval pipe would then use the arguments to
