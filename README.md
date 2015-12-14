@@ -146,7 +146,7 @@ end
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'pyper', :git => 'git@github.com:backupify/pyper.git'
+gem 'pyper_rb', :git => 'git@github.com:backupify/pyper.git'
 ```
 
 And then execute:
@@ -155,7 +155,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install pyper
+    $ gem install pyper_rb
 
 ## Contributing
 
